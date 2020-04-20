@@ -1,0 +1,84 @@
+<ion-content class="page-home">
+  <ion-grid class="header-section">
+    <ion-list>
+      <ion-list-header class="pl-18 pr-18">
+        <ion-icon class="text-white filter-icon" name="menu" (click)="toggleMenu()"></ion-icon>
+        <ion-label></ion-label>
+      </ion-list-header>
+      <ion-item lines="none">
+          <ion-avatar slot="start" class="avatar-user">
+            <img src="assets/images/avatar.png">
+          </ion-avatar>
+          <ion-label>
+            <h2 class="text-white">{{user?.first_name}} {{user?.last_name}} </h2>
+            <h3 class="text-white">Admin</h3>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+  </ion-grid>
+  <ion-grid class="first-card-section">
+    <ion-row class="ion-align-items-center">
+      <ion-col size="4" class="ion-align-items-center horizontal-items" fixed *ngFor="let item of itemBox" [routerLink]="item?.url">
+        <img src="assets/images/{{item?.icon}}" />
+        <h4>{{item?.title}}</h4>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid class="white-bg" *ngIf="user.organization_id == 1">
+    <ion-list-header class="pl-18 pr-18">
+      <b class="w-100">Statistiques</b>
+      <ion-icon class="arrow" name="chevron-forward" ></ion-icon>
+    </ion-list-header>
+    <ion-list class="stats-list">
+        <ion-item lines="none">
+          <ion-text slot="start">{{statistics?.products}}</ion-text>
+          <ion-label>
+            <h3>Produits</h3>
+            <h4>disponible sur la plateforme</h4>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-text slot="start">{{statistics?.clients}}</ion-text>
+          <ion-label>
+            <h3>Clients</h3>
+            <h4>nous ont choisis</h4>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-text slot="start">{{statistics?.publicities}}</ion-text>
+          <ion-label>
+            <h3>Publicités</h3>
+            <h4>sur l'ensemble de nos produits</h4>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-text slot="start">{{statistics?.organizations}}</ion-text>
+          <ion-label>
+            <h3>Structures</h3>
+            <h4>partenaires de confiance</h4>
+          </ion-label>
+        </ion-item>
+    </ion-list>
+  </ion-grid>
+  <!-- <ion-grid class="slider-section">
+    <ion-list-header class="pl-18 pr-18">
+      <b class="w-100">Emplacements</b>
+      <ion-icon class="arrow" name="chevron-forward" ></ion-icon>
+    </ion-list-header>
+    <ion-row class="pl-18 pr-18">
+      <ion-slides class="slides-elm" [options]="slideOpt" #homeSlide>
+        <ion-slide class="slide-elm" *ngFor="let menu of menus">
+          <ion-item class="w-100 sliding-item-elm" lines="none">
+            <ion-avatar slot="start" class="img-item">
+              <img src="assets/images/icon-trash.png">
+            </ion-avatar>
+            <ion-label>
+              <h3>{{menu?.title}}</h3>
+              <p>12 produits</p>
+            </ion-label>
+          </ion-item>
+        </ion-slide>
+      </ion-slides>
+    </ion-row>
+  </ion-grid> -->
+</ion-content>
