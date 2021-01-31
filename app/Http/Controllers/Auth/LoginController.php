@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Models\Users;
 
 class LoginController extends Controller
 {
@@ -51,9 +51,12 @@ class LoginController extends Controller
         $credentials = request(['email', 'password']);
 
         if(!Auth::attempt($credentials))
-            return response()->json(['message' => 'Non autorise', 'error' => true], 401);
+            return response()->json(['message' => 'Aucun utilisateur trouvé pour cet email', 'error' => true], 401);
 
         $user = $request->user();
+        if(!$user->active)
+           return response()->json(['message' => 'Désolé le profil est désactivé pour le moment', 'error' => true], 401);
+
         if($user){
           $tokenResult = $user->createToken('Personal Access Token');
 

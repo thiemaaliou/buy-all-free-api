@@ -27,14 +27,17 @@ class UserRequest extends Request
     public function rules()
     {
         return [
-         'firstname'              => 'required|string|min:2',
-         'lastname'               => 'required|string|min:2',
-         'name'                    => 'required|string|min:2',
-         'email'                   => 'required|string|min:6',
-         'phone'                   => 'required|string',
-         'address'                 => 'string',
-         'profil'                 => 'string',
-         'password'                => 'required|string|min:6',
+         'first_name'          => 'required|string|min:2',
+         'last_name'           => 'required|string|min:2',
+         'email'               => 'required|string|min:6',
+         'phone'               => 'required|string',
+         'account_type'        => 'required|integer',
+         'active'              => 'required|boolean',
+         'uid'                 => 'required|string|min:6',
+         'solde'               => 'required|integer',
+         'first_parent_id'     => 'integer',
+         'second_parent_id'    => 'integer',
+         'third_parent_id'     => 'integer'
         ];
     }
 

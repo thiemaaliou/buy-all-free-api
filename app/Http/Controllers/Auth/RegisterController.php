@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Models\Users;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -68,16 +68,24 @@ class RegisterController extends Controller
     {
       try {
         DB::beginTransaction();
-        $user = new User();
-        $user->firstname =  $request->firstname;
-        $user->lastname =  $request->lastname;
-        if($request->has('address')){
-          $user->address =  $request->address;
-        }
+        $user = new Users();
+        $user->first_name =  $request->first_name;
+        $user->last_name =  $request->last_name;
         $user->email =  $request->email;
         $user->phone =  $request->phone;
-        $user->name = $request->name;
-        $user->profil = $request->profil;
+        $user->account_type = $request->account_type;
+        $user->active = $request->active;
+        $user->uid = $request->uid;
+        $user->solde = $request->solde;
+        if(isset($request->first_parent_id))
+           $user->first_parent_id = $request->first_parent_id;
+
+       if(isset($request->second_parent_id))
+          $user->second_parent_id = $request->second_parent_id;
+
+        if(isset($request->third_parent_id))
+           $user->third_parent_id = $request->third_parent_id;
+           
         $user->password =  Hash::make($request->password);
         $user->save();
 

@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\ArticlesRepository;
+use App\Repositories\PurchaseRepository;
 use App\Http\Controllers\FilesController;
-use App\Models\Articles;
+use App\Models\Purchase;
 
-class ArticlesController extends Controller
+class PurchaseController extends Controller
 {
 
-  public function __construct(ArticlesRepository $repo)
+  public function __construct(PurchaseRepository $repo)
   {
       $this->repo = $repo;
   }
@@ -26,10 +26,10 @@ class ArticlesController extends Controller
   public function index()
   {
     try {
-      $data = Articles::with(['files', 'comments'])->get();
-      return $this->successResponse($data,  "Liste des articles");
+      $data = $this->repo->get();
+      return $this->successResponse($data,  "Liste des achats");
     } catch (\Exception $e) {
-      return $this->errorResponse('Impossiblede trouver les articles');
+        return $this->errorResponse($e->getMessage());
     }
   }
 
@@ -51,14 +51,15 @@ class ArticlesController extends Controller
   public function store(Request $request)
   {
     try {
-        $data = $request->all();
-        $user = Auth::user();
-        $data['created_by'] =  $user->id;
-        $data = $this->repo->create($data);
-        $request->articles_id = $data->id;
-        $fileCtrl = new FilesController();
-        $file = $fileCtrl->store($request);
-        return $this->successResponse($data,  "Article ajouté avec succès");
+
+          $data = $request->all();
+          $user = Auth::user();
+          $data['created_by'] =  $user->id;
+          $data = $this->repo->create($data);
+        if ($data->client_id) {
+
+        }
+        return $this->successResponse($data,  "Produit ajouté avec succès");
     } catch (\Exception $e) {
         return $this->errorResponse($e->getMessage());
     }
@@ -73,10 +74,10 @@ class ArticlesController extends Controller
   public function show($id)
   {
     try {
-      $data = Articles::where('id', $id)->with(['files', 'comments'])->get();
-      return $this->successResponse($data,  "Liste des articles");
+      $data = $this->repo->show($id);
+      return $this->successResponse($data,  "Details");
     } catch (\Exception $e) {
-      return $this->errorResponse('Impossiblede trouver les articles');
+        return $this->errorResponse($e->getMessage());
     }
   }
 
@@ -101,7 +102,7 @@ class ArticlesController extends Controller
   {
     try {
         $data = $this->repo->update($request->all(), $id);
-        return $this->successResponse($data,  "Article mis a jour avec succès");
+        return $this->successResponse($data,  "Achat mis a jour avec succès");
     } catch (\Exception $e) {
         return $this->errorResponse($e->getMessage());
     }
@@ -117,7 +118,7 @@ class ArticlesController extends Controller
   {
     try {
       $data = $this->repo->delete($id);
-      return $this->successResponse($data,  "Article supprimé avec succès");
+      return $this->successResponse($data,  "Achat supprimé avec succès");
     } catch (\Exception $e) {
       return $this->errorResponse($e->getMessage());
     }

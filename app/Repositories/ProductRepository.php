@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\Articles;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
-class ArticlesRepository extends Repository
+class ProductRepository extends Repository
 {
     function __construct(){
-		$this->model = new Articles();
+		$this->model = new Product();
 	}
 
 }

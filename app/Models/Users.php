@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Users extends Model 
+class Users extends Model
 {
 
     protected $table = 'users';
@@ -13,23 +13,23 @@ class Users extends Model
 
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
-    protected $fillable = array('firstname', 'lastname', 'phone', 'address', 'type');
-    protected $visible = array('firstname', 'lastname', 'phone', 'address', 'type');
+    protected $dates = ['deleted_at', 'created_at', 'updated_at'];
+    protected $fillable = array('first_name', 'last_name', 'phone', 'active', 'email', 'solde', 'uid', 'account_type', 'first_parent_id', 'second_parent_id', 'third_parent_id', 'password');
+    protected $visible = array('first_name', 'last_name', 'phone', 'active', 'email', 'solde', 'uid', 'account_type', 'first_parent_id', 'second_parent_id', 'third_parent_id');
 
-    public function articles()
+    public function first_parent()
     {
-        return $this->hasMany('Articles', 'created_by');
+        return $this->hasOne('Users', 'id');
     }
 
-    public function reads()
+    public function second_parent()
     {
-        return $this->hasMany('Reads', 'users_id');
+        return $this->hasMany('Users', 'id');
     }
 
-    public function downloads()
+    public function third_parent()
     {
-        return $this->hasMany('Downloads', 'users_id');
+        return $this->hasMany('Users', 'id');
     }
 
 }

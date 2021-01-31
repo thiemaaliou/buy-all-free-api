@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\Likes;
+use App\Models\Purchase;
 use Illuminate\Support\Facades\DB;
 
-class LikesRepository extends Repository
+class PurchaseRepository extends Repository
 {
     function __construct(){
-		$this->model = new Likes();
+		$this->model = new Purchase();
 	}
 
 }

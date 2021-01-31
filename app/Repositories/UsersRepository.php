@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\User;
+use App\Models\Users;
 use Illuminate\Support\Facades\DB;
 
 class UsersRepository extends Repository

@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\CategoriesRepository;
+use App\Repositories\PurchaseRepository;
 use App\Http\Controllers\FilesController;
-use App\Models\Categories;
+use App\Models\Product;
 
-class CategoriesController extends Controller
+class ProductController extends Controller
 {
 
-  public function __construct(CategoriesRepository $repo)
+  public function __construct(ProductRepository $repo)
   {
       $this->repo = $repo;
   }
@@ -26,10 +26,10 @@ class CategoriesController extends Controller
   public function index()
   {
     try {
-      $data = Categories::with(['articles'])->get();
-      return $this->successResponse($data,  "Liste des categories");
+      $data = Product::get();
+      return $this->successResponse($data,  "Liste des produits");
     } catch (\Exception $e) {
-      return $this->errorResponse('Impossiblede trouver les categories');
+      return $this->errorResponse('Impossible de trouver des produits');
     }
   }
 
@@ -55,7 +55,7 @@ class CategoriesController extends Controller
         $user = Auth::user();
         $data['created_by'] =  $user->id;
         $data = $this->repo->create($data);
-        return $this->successResponse($data,  "Catégorie ajouté avec succès");
+        return $this->successResponse($data,  "Produit ajouté avec succès");
     } catch (\Exception $e) {
         return $this->errorResponse($e->getMessage());
     }
@@ -70,10 +70,10 @@ class CategoriesController extends Controller
   public function show($id)
   {
     try {
-      $data = Categories::where('id', $id)->with(['articles'])->get();
-      return $this->successResponse($data,  "Liste des articles");
+      $data = Produit::where('id', $id)->get();
+      return $this->successResponse($data,  "Details produit");
     } catch (\Exception $e) {
-      return $this->errorResponse('Impossiblede trouver les articles');
+      return $this->errorResponse('Impossible de trouver le produit');
     }
   }
 
@@ -98,7 +98,7 @@ class CategoriesController extends Controller
   {
     try {
         $data = $this->repo->update($request->all(), $id);
-        return $this->successResponse($data,  "Article mis a jour avec succès");
+        return $this->successResponse($data,  "Produit mis a jour avec succès");
     } catch (\Exception $e) {
         return $this->errorResponse($e->getMessage());
     }
@@ -114,7 +114,7 @@ class CategoriesController extends Controller
   {
     try {
       $data = $this->repo->delete($id);
-      return $this->successResponse($data,  "Article supprimé avec succès");
+      return $this->successResponse($data,  "Produit supprimé avec succès");
     } catch (\Exception $e) {
       return $this->errorResponse($e->getMessage());
     }

@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Bienvenue sur Boustanou Hanrifina
+                    BUY ALL FREE
                 </div>
 
             </div>

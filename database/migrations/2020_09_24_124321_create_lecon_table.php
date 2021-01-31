@@ -3,21 +3,24 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateArticlesTable extends Migration {
+class CreateLeconTable extends Migration {
 
 	public function up()
 	{
-		Schema::create('articles', function(Blueprint $table) {
+		Schema::create('lecon', function(Blueprint $table) {
 			$table->increments('id');
 			$table->timestamps();
 			$table->softDeletes();
-			$table->longText('contenu')->nullable();
+			$table->string('title', 255);
+			$table->text('content');
+			$table->integer('sommaire_id')->unsigned();
 			$table->integer('created_by')->unsigned();
+			$table->integer('reads')->nullable();
 		});
 	}
 
 	public function down()
 	{
-		Schema::drop('articles');
+		Schema::drop('lecon');
 	}
 }

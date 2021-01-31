@@ -19,12 +19,11 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('signup', 'Auth\RegisterController@create');
 });
 
-Route::group(['middleware' => 'auth:api', 'prefix' => 'fr'], function(){
-    Route::get('articles/{id}/comments', 'CommentsController@getCommentsByArticle');
-
-    Route::post('images/upload', 'FilesController@store');
-    Route::resource('articles', 'ArticlesController');
-    Route::resource('comments', 'CommentsController');
-    Route::resource('likes', 'LikesController');
-    Route::resource('categories', 'CategoriesController');
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::resource('lecon', 'LeconController');
+    Route::resource('sommaire', 'SommaireController');
+    // Route::resource('articles', 'ArticlesController');
+    // Route::resource('comments', 'CommentsController');
+    // Route::resource('likes', 'LikesController');
+    // Route::resource('categories', 'CategoriesController');
 });
