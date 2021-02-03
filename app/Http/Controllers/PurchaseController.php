@@ -6,12 +6,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\PurchaseRepository;
-use App\Http\Controllers\FilesController;
+use App\Repositories\UsersRepository;
 use App\Models\Purchase;
+use App\Models\Users as User;
+use App\Traits\SendMessageTrait as SendMessage;
 
 class PurchaseController extends Controller
 {
+  use SendMessage;
 
+  public $clientrep;
   public function __construct(PurchaseRepository $repo)
   {
       $this->repo = $repo;
@@ -26,7 +30,7 @@ class PurchaseController extends Controller
   public function index()
   {
     try {
-      $data = $this->repo->get();
+      $data = $this->repo->withRelations('client');
       return $this->successResponse($data,  "Liste des achats");
     } catch (\Exception $e) {
         return $this->errorResponse($e->getMessage());
@@ -56,13 +60,34 @@ class PurchaseController extends Controller
           $user = Auth::user();
           $data['created_by'] =  $user->id;
           $data = $this->repo->create($data);
-        if ($data->client_id) {
+          $this->clientrep = new UsersRepository;
+          if ($data->client_id) {
+           $client = User::find($data->client_id);
+           if($client->first_parent_id){
+             $amount = 0.05 * $data->amount;
+             $this->updateClientSolde($client->first_parent_id, $amount);
 
+           }
+           if($client->second_parent_id){
+             $amount = 0.03 * $data->amount;
+             $this->updateClientSolde($client->second_parent_id, $amount);
+           }
+           if($client->third_parent_id){
+             $amount = 0.02 * $data->amount;
+             $this->updateClientSolde($client->third_parent_id, $amount);
+           }
         }
-        return $this->successResponse($data,  "Produit ajouté avec succès");
+        return $this->successResponse($data,  "Achat ajouté avec succès");
     } catch (\Exception $e) {
         return $this->errorResponse($e->getMessage());
     }
+  }
+
+  public function updateClientSolde($user_id, $solde){
+    $cl = User::find($user_id);
+    $cl->solde = $cl->solde + $solde;
+    $this->sendSms($cl, $solde);
+    return $this->clientrep->update($cl->toArray(), $user_id);
   }
 
   /**
@@ -121,6 +146,16 @@ class PurchaseController extends Controller
       return $this->successResponse($data,  "Achat supprimé avec succès");
     } catch (\Exception $e) {
       return $this->errorResponse($e->getMessage());
+    }
+
+  }
+
+  public function sendSms($client, $solde){
+    try {
+      $data = $this->sendMessageToUser($client, $solde);
+      return $this->successResponse($data,  "Liste des achats");
+    } catch (\Exception $e) {
+        return $this->errorResponse($e->getMessage());
     }
 
   }

@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\UserRepository;
+use App\Repositories\UsersRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use App\User;
+use App\Models\Users;
 
-class Users Controller extends Controller
+class UsersController extends Controller
 {
 
-  public function __construct(UserRepository $repo)
+  public function __construct(UsersRepository $repo)
   {
       $this->repo = $repo;
   }
@@ -27,13 +27,13 @@ class Users Controller extends Controller
   {
     try {
       //var_dump(Auth::user());
-      if(Auth::user()->profil == 'Administrateur'){
-          $data = $this->repo->all();
+      if(Auth::user()->account_type == 1){
+          $data = $this->repo->getWhere('account_type', 2);
       }else{
-          $data = User::where('id', Auth::user()->id)->get();
+          $data = Users::where('id', Auth::user()->id)->get();
       }
         //$data['user'] = Auth::user();
-        return $this->successResponse($data, 'Liste');
+      return $this->successResponse($data, 'Liste');
     } catch (\Exception $e) {
       return $this->errorResponse($e->getMessage());
     }
@@ -76,7 +76,7 @@ class Users Controller extends Controller
    */
   public function show($id)
   {
-    
+
   }
 
   /**
@@ -96,9 +96,15 @@ class Users Controller extends Controller
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update(Request $request, $id)
   {
-
+    try {
+        $data = $this->repo->update($request->all(), $id);
+        return $this->successResponse($data,  "Utilisateur mis a jour avec succès");
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return $this->errorResponse($e->getMessage());
+    }
   }
 
   /**
@@ -110,6 +116,16 @@ class Users Controller extends Controller
   public function destroy($id)
   {
 
+  }
+
+  public function getUserByUid($uid){
+    try {
+        $data = $this->repo->getByUid($uid);
+        return $this->successResponse($data, 'User details');
+    } catch (\Exception $e) {
+      Log::error($e->getMessage());
+      return $this->errorResponse($e->getMessage());
+    }
   }
 
 }

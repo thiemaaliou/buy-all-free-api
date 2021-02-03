@@ -20,10 +20,9 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::resource('lecon', 'LeconController');
-    Route::resource('sommaire', 'SommaireController');
-    // Route::resource('articles', 'ArticlesController');
-    // Route::resource('comments', 'CommentsController');
-    // Route::resource('likes', 'LikesController');
-    // Route::resource('categories', 'CategoriesController');
+    Route::get('client/{uid}', 'UsersController@getUserByUid');
+    Route::resource('product', 'ProductController');
+    Route::resource('purchase', 'PurchaseController');
+    Route::resource('users', 'UsersController');
+    Route::post('sendsms', 'PurchaseController@sendSms');
 });

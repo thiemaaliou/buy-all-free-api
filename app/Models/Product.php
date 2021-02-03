@@ -15,7 +15,7 @@ class Product extends Model
 
     protected $dates = ['deleted_at', 'created_at', 'updated_at'];
     protected $fillable = array('name', 'price', 'code', 'created_by');
-    protected $visible = array('name', 'price', 'code', 'created_by');
+    protected $visible = array('id', 'name', 'price', 'code', 'created_by');
 
 
 

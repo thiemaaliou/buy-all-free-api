@@ -85,8 +85,12 @@ class RegisterController extends Controller
 
         if(isset($request->third_parent_id))
            $user->third_parent_id = $request->third_parent_id;
-           
-        $user->password =  Hash::make($request->password);
+
+        if(isset($request->password))
+          $user->password =  Hash::make($request->password);
+        else
+          $user->password =  Hash::make('buyallfree');
+
         $user->save();
 
         Db::commit();

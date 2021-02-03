@@ -15,7 +15,7 @@ class Users extends Model
 
     protected $dates = ['deleted_at', 'created_at', 'updated_at'];
     protected $fillable = array('first_name', 'last_name', 'phone', 'active', 'email', 'solde', 'uid', 'account_type', 'first_parent_id', 'second_parent_id', 'third_parent_id', 'password');
-    protected $visible = array('first_name', 'last_name', 'phone', 'active', 'email', 'solde', 'uid', 'account_type', 'first_parent_id', 'second_parent_id', 'third_parent_id');
+    protected $visible = array('id','first_name', 'last_name', 'phone', 'active', 'email', 'solde', 'uid', 'account_type', 'first_parent_id', 'second_parent_id', 'third_parent_id');
 
     public function first_parent()
     {
@@ -30,6 +30,10 @@ class Users extends Model
     public function third_parent()
     {
         return $this->hasMany('Users', 'id');
+    }
+
+    public function purchase(){
+      return $this->hasMany(Purchase::class, 'client_id');
     }
 
 }

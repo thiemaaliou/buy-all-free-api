@@ -14,12 +14,12 @@ class Purchase extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at', 'created_at', 'updated_at'];
-    protected $fillable = array('amount', 'purchaseDetails', 'client_id', 'created_by');
-    protected $visible = array('amount', 'purchaseDetails', 'client_id', 'created_by');
+    protected $fillable = array('amount', 'purchase_details', 'client_id', 'created_by');
+    protected $visible = array('id', 'amount', 'purchase_details', 'client_id', 'created_by', 'client');
 
     public function client()
     {
-        return $this->belongsTo('Models\Users', 'client_id');
+        return $this->belongsTo(Users::class, 'client_id');
     }
 
     public function created_by()
