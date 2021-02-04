@@ -59,7 +59,12 @@ class UsersController extends Controller
     try {
         $data = $request->all();
         $data['created_by'] =  Auth::id();
-        $data['password'] =  Hash::make($data['password']);
+        if(!isset($data['password']))
+          $password = 'buyallfree';
+        else
+          $password = $data['password'];
+          
+        $data['password'] =  Hash::make($password);
         $data = $this->repo->create($data);
         return $this->successResponse($data, 'User added');
     } catch (\Exception $e) {
